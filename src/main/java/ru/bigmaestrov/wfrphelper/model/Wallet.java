@@ -58,7 +58,7 @@ public class Wallet {
             addGoldCrown((getSilverShillings() + number) / 20);
             setSilverShillings(((getSilverShillings() + number) % 20));
         } else {
-            setSilverShillings((getSilverShillings()+number));
+            setSilverShillings((getSilverShillings() + number));
         }
     }
 
@@ -67,26 +67,29 @@ public class Wallet {
             addSilverShillings((getBrassPennies() + number) / 12);
             setBrassPennies(((getBrassPennies() + number) % 12));
         } else {
-            setBrassPennies((getBrassPennies()+number));
+            setBrassPennies((getBrassPennies() + number));
         }
     }
 
     public void substructGoldCrown(int number) {
-        setGoldCrown(getGoldCrown() - number);
+        if (getGoldCrown() >= number) setGoldCrown(getGoldCrown() - number);
+        else System.err.println("You haven't enough money");
     }
 
     public void substructSilverShillings(int number) {
-        if (getSilverShillings() < number) {
-            substructGoldCrown(1);
-            setSilverShillings(getSilverShillings() + 20 - number);
-        } else setSilverShillings(getSilverShillings() - number);
+        if (getSilverShillings() >= number) setSilverShillings(getSilverShillings() - number);
+        else if (getSilverShillings() < number && getGoldCrown()*20+getSilverShillings() > number) {
+            substructGoldCrown((int) Math.ceil((((double) number-getSilverShillings()))/20));
+            setSilverShillings(getSilverShillings() + (int) Math.ceil(((double) number-getSilverShillings())/20)*20 - number);
+        } else System.err.println("You haven't enough money");
     }
 
     public void substructBrassPennies(int number) {
-        if (getBrassPennies() < number) {
-            substructSilverShillings(1);
-            setBrassPennies(getBrassPennies() + 12 - number);
-        } else setBrassPennies(getBrassPennies() - number);
+        if (getBrassPennies() < number && getSilverShillings()*12+getBrassPennies() > number) {
+            substructSilverShillings((int) Math.ceil((((double) number-getBrassPennies()))/12));
+            setBrassPennies(getBrassPennies() + (int) Math.ceil(((double) number-getBrassPennies())/12)*12 - number);
+        }else if (getBrassPennies() >= number) setBrassPennies(getBrassPennies() - number);
+        else System.err.println("You haven't enough money");
     }
 
     public void showWallet() {
