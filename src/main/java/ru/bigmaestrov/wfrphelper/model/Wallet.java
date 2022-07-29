@@ -1,9 +1,6 @@
 package ru.bigmaestrov.wfrphelper.model;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * Class for storing and exchanging money
@@ -101,17 +98,17 @@ public class Wallet {
 
     public void substructSilverShillings(int number) {
         if (getSilverShillings() >= number) setSilverShillings(getSilverShillings() - number);
-        else if (getSilverShillings() < number && getGoldCrown()*20+getSilverShillings() >= number) {
-            substructGoldCrown((int) Math.ceil((((double) number-getSilverShillings()))/20));
-            setSilverShillings(getSilverShillings() + (int) Math.ceil(((double) number-getSilverShillings())/20)*20 - number);
+        else if (getSilverShillings() < number && getGoldCrown() * 20 + getSilverShillings() >= number) {
+            substructGoldCrown((int) Math.ceil((((double) number - getSilverShillings())) / 20));
+            setSilverShillings(getSilverShillings() + (int) Math.ceil(((double) number - getSilverShillings()) / 20) * 20 - number);
         } else System.err.println("You haven't enough money");
     }
 
     public void substructBrassPennies(int number) {
         if (getBrassPennies() >= number) setBrassPennies(getBrassPennies() - number);
-        else if (getBrassPennies() < number && getGoldCrown()*20*12+getSilverShillings()*12+getBrassPennies() >= number) {
-            substructSilverShillings((int) Math.ceil((((double) number-getBrassPennies()))/12));
-            setBrassPennies(getBrassPennies() + (int) Math.ceil(((double) number-getBrassPennies())/12)*12 - number);
+        else if (getBrassPennies() < number && getGoldCrown() * 20 * 12 + getSilverShillings() * 12 + getBrassPennies() >= number) {
+            substructSilverShillings((int) Math.ceil((((double) number - getBrassPennies())) / 12));
+            setBrassPennies(getBrassPennies() + (int) Math.ceil(((double) number - getBrassPennies()) / 12) * 12 - number);
         } else System.err.println("You haven't enough money");
     }
 
@@ -120,10 +117,10 @@ public class Wallet {
     }
 
     public String getWallet() {
-       return getGoldCrown() + " " + getSilverShillings() + " " + getBrassPennies();
+        return getOwner() + " " + getGoldCrown() + " " + getSilverShillings() + " " + getBrassPennies();
     }
 
-    public void saveToTxtFile(String filePath){
+    public void saveToTxtFile(String filePath) {
         try {
             PrintStream out = new PrintStream(new FileOutputStream(filePath));
             out.println(getWallet());
@@ -132,5 +129,17 @@ public class Wallet {
         }
     }
 
-
+    public void loadFromTxtFile(String filePath) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String[] s = br.readLine().split(" ");
+            setOwner(s[0]);
+            setGoldCrown(Integer.parseInt(s[1]));
+            setSilverShillings(Integer.parseInt(s[2]));
+            setBrassPennies(Integer.parseInt(s[3]));
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
