@@ -1,5 +1,10 @@
 package ru.bigmaestrov.wfrphelper.model;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
 /**
  * Class for storing and exchanging money
  * goldCrown = 20 silverShillings = 240 brassPennies
@@ -113,4 +118,19 @@ public class Wallet {
     public void showWallet() {
         System.out.println("Now you have " + getGoldCrown() + " " + getSilverShillings() + " " + getBrassPennies());
     }
+
+    public String getWallet() {
+       return getGoldCrown() + " " + getSilverShillings() + " " + getBrassPennies();
+    }
+
+    public void saveToTxtFile(String filePath){
+        try {
+            PrintStream out = new PrintStream(new FileOutputStream(filePath));
+            out.println(getWallet());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
