@@ -9,6 +9,7 @@ package ru.bigmaestrov.wfrphelper.model;
  * @autor Nikita Egorov
  */
 public class Wallet {
+    String owner;
     int goldCrown;
     int silverShillings;
     int brassPennies;
@@ -17,12 +18,29 @@ public class Wallet {
         setGoldCrown(0);
         setSilverShillings(0);
         setBrassPennies(0);
+        setOwner("None");
     }
 
     public Wallet(int goldCrown, int silverShillings, int brassPennies) {
         addBrassPennies(brassPennies);
         addSilverShillings(silverShillings);
         addGoldCrown(goldCrown);
+        setOwner("None");
+    }
+
+    public Wallet(int goldCrown, int silverShillings, int brassPennies, String owner) {
+        addBrassPennies(brassPennies);
+        addSilverShillings(silverShillings);
+        addGoldCrown(goldCrown);
+        setOwner(owner);
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public int getGoldCrown() {
